@@ -1,0 +1,10 @@
+# Created @ 18.12.2010 by TheFox@fox21.at
+
+Description
+	Start a SYN flood attack to an ip address.
+
+Requirements
+	- libnet.
+	- Root access for sending a packet.
+
+# EOF
