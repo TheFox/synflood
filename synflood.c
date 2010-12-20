@@ -27,20 +27,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-#include <arpa/inet.h>
-#include <netinet/tcp.h>
-#include <netinet/ip.h>
-#include <netinet/in.h>
-#include <netinet/ether.h>
-#include <sys/socket.h>
 #include <libnet.h>
 
 //#define DEBUG
-#define SRC_PORT_RND
+//#define SRC_PORT_RND
 //#define EXIT_ON_FAIL
+#define TTL 255
 #define USLEEP 250
 #define ARGC_MIN 4
+
 
 
 void usagePrint();
@@ -86,6 +81,7 @@ int main(int argc, char **argv){
 	
 	printf("SRC %s\n", srcIpStr);
 	printf("DST %s %d\n", dstIpStr, dstPort);
+	printf("TTL %d\n", TTL);
 	puts("\nstart");
 	
 	// connectionsc < connections
@@ -117,7 +113,7 @@ int main(int argc, char **argv){
 			0, // TOS
 			libnet_get_prand(LIBNET_PRu16), // ip id
 			IP_DF, // flag offset
-			64, // ttl
+			TTL, // ttl
 			IPPROTO_TCP, // upper layer protocol
 			srcIp,
 			dstIp,

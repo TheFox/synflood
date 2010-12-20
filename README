@@ -4,7 +4,7 @@ Description
 	Start a SYN flood attack to an ip address.
 
 Requirements
-	- libnet.
+	- libnet. "libnet0-dev" under Debian.
 	- Root access for sending a packet.
 
 # EOF
