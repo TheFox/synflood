@@ -1,7 +1,7 @@
 
 /*
 	Created @ 18.12.2010 by TheFox@fox21.at
-	Version: 1.0.1
+	Version: 2.0.0
 	Copyright (c) 2010 TheFox
 	
 	This program is free software: you can redistribute it and/or modify
