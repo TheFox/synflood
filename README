@@ -6,5 +6,6 @@ Description
 Requirements
 	- libnet1. "libnet1-dev" under Debian.
 	- Root access for sending a packet.
+	- Its recommended to block all RST packets from the source host on the source host.
 
 # EOF
