@@ -61,6 +61,11 @@ int main(int argc, char **argv){
 	if(argc < ARGC_MIN)
 		usagePrint();
 	
+	if(getuid()){
+		fprintf(stderr, "ERROR: You are not root, script kiddie.\n");
+		exit(1);
+	}
+	
 	srcIpStr = argv[1];
 	dstIpStr = argv[2];
 	dstPort = atoi(argv[3]);
