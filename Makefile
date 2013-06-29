@@ -7,7 +7,7 @@ CC = gcc
 CFLAGS = `libnet-config --defines` `libnet-config --libs` `libnet-config --cflags` -DVERSION=\"$(VERSION)\"
 
 
-synflood: clean
+all: clean
 	$(CC) $(CFLAGS) -o synflood synflood.c
 
 clean:

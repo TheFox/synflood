@@ -1,0 +1,12 @@
+
+iptables-flush
+
+
+iptables -I OUTPUT -p tcp --dport 80 --tcp-flags RST RST -j DROP
+iptables -I OUTPUT -p tcp --dport 80 --tcp-flags RST ACK -j DROP
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+DROP       tcp  --  anywhere             anywhere            tcp dpt:www flags:RST/ACK
+DROP       tcp  --  anywhere             anywhere            tcp dpt:www flags:RST/RST
+

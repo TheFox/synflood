@@ -31,11 +31,10 @@
 
 #define DEBUG
 //#define SRC_PORT_RND
-#define EXIT_ON_FAIL
+//#define EXIT_ON_FAIL
 #define TTL 255
 #define USLEEP 250
 #define ARGC_MIN 4
-
 
 
 void usagePrint();
@@ -56,7 +55,7 @@ int main(int argc, char **argv){
 	libnet_t *net;
 	libnet_ptag_t ipv4 = 0, tcp = 0;
 	
-	printf("synflood " VERSION " (%s %s)\n", __DATE__, __TIME__);
+	puts("synflood " VERSION " (" __DATE__ " " __TIME__ ")");
 	puts("Copyright (c) 2010 TheFox@fox21.at\n");
 	if(argc < ARGC_MIN)
 		usagePrint();
