@@ -1,4 +1,4 @@
-# synflood
+# SynFlood
 Start a SYN flood attack to an ip address.
 
 ## Requirements
