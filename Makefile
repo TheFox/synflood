@@ -10,6 +10,7 @@ RM = rm -rf
 all: synflood
 
 synflood:
+	$(CC) --version
 	$(CC) $(CFLAGS) -o synflood synflood.c
 
 test: synflood
