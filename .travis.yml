@@ -5,4 +5,7 @@ compiler:
 before_install:
     - sudo apt-get update
     - sudo apt-get install -y libnet1-dev
+    - libnet-config --defines
+    - libnet-config --libs
+    - libnet-config --cflags
 script: 'make && make test'
