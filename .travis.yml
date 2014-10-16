@@ -6,7 +6,7 @@ before_install:
     - echo $CXX
     - echo $CC
     - sudo apt-get update
-    - 'if [ "$CC" = "gcc" ]; then sudo apt-get install -y gcc-4.7-base; fi'
+    - 'if [ "$CC" = "gcc" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; sudo apt-get install -y gcc-4.7-base; fi'
     - ls -la /usr/bin/gcc*
     - gcc --version
     - which -a gcc
