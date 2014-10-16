@@ -4,7 +4,7 @@ compiler:
     - gcc
 before_install:
     - sudo apt-get update
-    - sudo apt-get install -y libnet1-dev
+    - sudo apt-get install -y libnet-dev
     - libnet-config --defines
     - libnet-config --libs
     - libnet-config --cflags
