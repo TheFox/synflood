@@ -3,8 +3,10 @@ compiler:
     - clang
     - gcc
 before_install:
+    - echo $CXX
+    - echo $CC
     - sudo apt-get update
-    - sudo apt-get install -y gcc-4.7
+    - 'if [ "$CC" = "gcc" ]; then sudo apt-get install -y gcc-4.7; export CC="gcc-4.7"; fi'
     - sudo apt-get install -y libnet-dev
     - gcc --version
     - libnet-config --defines
