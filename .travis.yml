@@ -10,7 +10,7 @@ before_install:
     - gcc --version
     - which -a gcc
     - type gcc
-    - update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 90
+    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 90
     - ls -la /usr/bin/gcc*
     - ls -la /usr/alter*
     - gcc --version
