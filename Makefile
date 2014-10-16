@@ -1,7 +1,7 @@
 # synflood Makefile
 # Created @ 18.12.2010 by Christian Mayer <http://fox21.at>
 
-CFLAGS = -lnet `libnet-config --defines` `libnet-config --libs` `libnet-config --cflags`
+CFLAGS = -Wall `libnet-config --defines` `libnet-config --libs` `libnet-config --cflags`
 RM = rm -rf
 
 

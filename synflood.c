@@ -43,8 +43,7 @@ int main(int argc, char **argv){
 	
 	unsigned int connections = 0;
 	unsigned int connectionsc;
-	int i, sockWriteBytes;
-	char *buf = NULL;
+	int sockWriteBytes;
 	char *errbuf = NULL;
 	char *srcIpStr = NULL;
 	char *dstIpStr = NULL;
@@ -52,7 +51,7 @@ int main(int argc, char **argv){
 	u_int32_t dstIp = 0;
 	u_int16_t srcPort = 0;
 	u_int16_t dstPort = 0;
-	libnet_t *net;
+	libnet_t *net = NULL;
 	libnet_ptag_t ipv4 = 0, tcp = 0;
 	
 	puts("synflood " VERSION " (" __DATE__ " " __TIME__ ")");
