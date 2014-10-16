@@ -1,8 +1,7 @@
 
 /*
-	Created @ 18.12.2010 by TheFox@fox21.at
-	Version: 2.0.1
-	Copyright (c) 2010 TheFox
+	Created @ 18.12.2010
+	Copyright (C) 2010 Christian Mayer <http://fox21.at>
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,17 +23,18 @@
 */
 
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <libnet.h>
-
+#define VERSION "2.0.2"
 #define DEBUG
 //#define SRC_PORT_RND
 //#define EXIT_ON_FAIL
 #define TTL 255
 #define USLEEP 250
 #define ARGC_MIN 4
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <libnet.h>
 
 
 void usagePrint();
@@ -56,7 +56,7 @@ int main(int argc, char **argv){
 	libnet_ptag_t ipv4 = 0, tcp = 0;
 	
 	puts("synflood " VERSION " (" __DATE__ " " __TIME__ ")");
-	puts("Copyright (c) 2010 TheFox@fox21.at\n");
+	puts("Copyright (C) 2010 - 2014 Christian Mayer <http://fox21.at>\n");
 	if(argc < ARGC_MIN)
 		usagePrint();
 	
@@ -170,7 +170,5 @@ int main(int argc, char **argv){
 
 void usagePrint(){
 	printf("Usage: ./synflood SRC DST DPT [CONNECTIONS]\n");
-	exit(1);
+	exit(0);
 }
-
-// EOF
