@@ -4,18 +4,8 @@ compiler:
     - gcc
 before_install:
     - 'if [ "$CC" = "gcc" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi'
-    - sudo apt-get update
-    - 'if [ "$CC" = "gcc" ]; then sudo apt-get install -y gcc-4.7-base; fi'
-    - ls -la /usr/bin/gcc*
-    - gcc --version
-    - which -a gcc
-    - type gcc
-    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 90
-    - ls -la /usr/bin/gcc*
-    - ls -la /usr/alter*
-    - gcc --version
-    - sudo apt-get install -y libnet-dev
-    - libnet-config --defines
-    - libnet-config --libs
-    - libnet-config --cflags
+    - sudo apt-get update -qq
+install:
+    - 'if [ "$CC" = "gcc" ]; then sudo apt-get install -qq gcc-4.8 g++-4.8; fi'
+    - 'if [ "$CC" = "gcc" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90; fi'
 script: 'make && make test'
