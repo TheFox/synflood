@@ -3,8 +3,6 @@ compiler:
     - clang
     - gcc
 before_install:
-    - echo $CXX
-    - echo $CC
     - 'if [ "$CC" = "gcc" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi'
     - sudo apt-get update
     - 'if [ "$CC" = "gcc" ]; then sudo apt-get install -y gcc-4.7-base; fi'
@@ -13,8 +11,9 @@ before_install:
     - which -a gcc
     - which -a gcc-4.7
     - type gcc
-    - type gcc-4.7
     - update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 90
+    - ls -la /usr/bin/gcc*
+    - ls -la /usr/alter*
     - gcc --version
     - sudo apt-get install -y libnet-dev
     - libnet-config --defines
