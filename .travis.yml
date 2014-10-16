@@ -6,9 +6,16 @@ before_install:
     - echo $CXX
     - echo $CC
     - sudo apt-get update
-    - 'if [ "$CC" = "gcc" ]; then sudo apt-get install -y gcc-4.7; export CC="gcc-4.7"; fi'
-    - sudo apt-get install -y libnet-dev
+    - 'if [ "$CC" = "gcc" ]; then sudo apt-get install -y gcc-4.7-base; fi'
+    - ls -la /usr/bin/gcc*
     - gcc --version
+    - which -a gcc
+    - which -a gcc-4.7
+    - type gcc
+    - type gcc-4.7
+    - update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 90
+    - gcc --version
+    - sudo apt-get install -y libnet-dev
     - libnet-config --defines
     - libnet-config --libs
     - libnet-config --cflags
