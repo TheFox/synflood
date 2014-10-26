@@ -8,7 +8,7 @@ RM = rm -rf
 
 .PHONY: all test clean
 
-all: synflood
+all: synflood test
 
 synflood:
 	$(CC) --version
