@@ -5,7 +5,9 @@ compiler:
 before_install:
     - 'if [ "$CXX" = "gcc" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi'
     - 'if [ "$CXX" = "gcc" ]; then sudo apt-get update -qq; fi'
+install:
     - 'if [ "$CXX" = "gcc" ]; then sudo apt-get install g++-4.8; fi'
     - 'if [ "$CXX" = "gcc" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50; fi'
     - sudo apt-get install -y libnet-dev
-script: 'make && make test'
+    - make
+script: make test
