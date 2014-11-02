@@ -11,7 +11,7 @@ Start a SYN flood attack to an ip address.
 
 ## Usage
 
-`./synflood SRC DST DPT [CONNECTIONS]`
+	./synflood SRC DST DPT [CONNECTIONS]
 
 - `SRC`: Source IP address.
 - `DST`: Destination IP address.
@@ -20,9 +20,8 @@ Start a SYN flood attack to an ip address.
 
 Examples:
 
-`./synflood 192.168.241.31 192.168.1.3 80`
-
-`./synflood 192.168.241.31 192.168.1.3 80 1000`
+	./synflood 192.168.241.31 192.168.1.3 80
+	./synflood 192.168.241.31 192.168.1.3 80 1000
 
 ## Links
 - [Travis CI Repository](https://travis-ci.org/TheFox/synflood)
