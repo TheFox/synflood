@@ -12,9 +12,6 @@ MY_CC_PATH := $(shell which $(CC))
 all: synflood test
 
 synflood:
-	# CC: $(CC)
-	# CC path: $(MY_CC_PATH)
-	# CC path ls: $(shell ls -l $(MY_CC_PATH))
 	@$(CC) --version
 	@$(CC) $(CFLAGS) -o synflood synflood.c $(CLIBS)
 
