@@ -6,7 +6,3 @@ install:
     - sudo apt-get install -y libnet-dev
     - make
 script: make test
-notifications:
-    irc: 'irc.freenode.org#thefox'
-    on_success: never
-    on_failure: always
