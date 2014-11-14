@@ -9,10 +9,10 @@
 	],
 	"build_systems":[
 		{
-			"name": "Test",
-			"cmd": ["make test"],
-			"env": {"PATH": "$PATH:/usr/local/bin"},
-			"shell": true
+			"name": "CMake",
+			"cmd": ["cmake . && make"],
+			"shell": true,
+			"path": "$PATH:/usr/local/bin"
 		}
 	]
 }

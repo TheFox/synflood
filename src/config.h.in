@@ -1,0 +1,13 @@
+
+#define SynFlood_NAME "@PROJECT_NAME@"
+#define SynFlood_VERSION_MAJOR @SynFlood_VERSION_MAJOR@
+#define SynFlood_VERSION_MINOR @SynFlood_VERSION_MINOR@
+#define SynFlood_VERSION_PATCH @SynFlood_VERSION_PATCH@
+#define SynFlood_COPYRIGHT "Copyright (C) 2010 - 2014 Christian Mayer <http://fox21.at>"
+
+#define DEBUG
+//#define SRC_PORT_RND
+//#define EXIT_ON_FAIL
+#define TTL 255
+#define USLEEP 250
+#define ARGC_MIN 4

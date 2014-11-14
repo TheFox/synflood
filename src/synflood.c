@@ -22,21 +22,8 @@
 	Under Debian Linux install libnet1-dev.
 */
 
-
-#define VERSION "2.0.2"
-#define DEBUG
-//#define SRC_PORT_RND
-//#define EXIT_ON_FAIL
-#define TTL 255
-#define USLEEP 250
-#define ARGC_MIN 4
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <libnet.h>
-
-
+#include "synflood.h"
+	
 void usagePrint();
 
 int main(int argc, char **argv){
@@ -54,8 +41,11 @@ int main(int argc, char **argv){
 	libnet_t *net = NULL;
 	libnet_ptag_t ipv4 = 0, tcp = 0;
 	
-	puts("synflood " VERSION " (" __DATE__ " " __TIME__ ")");
-	puts("Copyright (C) 2010 - 2014 Christian Mayer <http://fox21.at>\n");
+	printf("%s %d.%d.%d (%s %s)\n", SynFlood_NAME,
+		SynFlood_VERSION_MAJOR, SynFlood_VERSION_MINOR, SynFlood_VERSION_PATCH,
+		__DATE__, __TIME__);
+	printf("%s\n", SynFlood_COPYRIGHT);
+	
 	if(argc < ARGC_MIN)
 		usagePrint();
 	
@@ -169,5 +159,5 @@ int main(int argc, char **argv){
 
 void usagePrint(){
 	printf("Usage: ./synflood SRC DST DPT [CONNECTIONS]\n");
-	exit(0);
+	exit(1);
 }

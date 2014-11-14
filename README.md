@@ -9,6 +9,18 @@ Start a SYN flood attack to an ip address.
 		iptables -I OUTPUT -p tcp --dport 80 --tcp-flags RST RST -j DROP
 		iptables -I OUTPUT -p tcp --dport 80 --tcp-flags RST ACK -j DROP
 
+## Build
+
+1. Clone:
+	
+		git clone https://github.com/TheFox/synflood.git
+
+2. In `synflood` directory, make:
+	
+		cmake . && make && make test
+
+3. Done.
+
 ## Usage
 
 	./synflood SRC DST DPT [CONNECTIONS]

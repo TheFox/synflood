@@ -4,5 +4,5 @@ compiler:
     - gcc
 install:
     - sudo apt-get install -y libnet-dev
-    - make
-script: make test
+    - 'mkdir build && cd build && cmake .. && make'
+script: 'cd build && make test'
