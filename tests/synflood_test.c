@@ -20,5 +20,5 @@ int main(int argc, char **argv){
 	printf("libnet_get_prand(): %p\n", libnet_get_prand);
 	printf("libnet_build_ipv4(): %p\n", libnet_build_ipv4);
 	
-	return 0;
+	return EXIT_SUCCESS;
 }

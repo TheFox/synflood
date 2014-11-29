@@ -154,7 +154,7 @@ int main(int argc, char **argv){
 	free(errbuf);
 	
 	puts("\nexit 0");
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 void usagePrint(){
