@@ -35,11 +35,9 @@ add_definitions(-Wall)
 add_definitions(-O3)
 
 add_executable(synflood ${SynFlood_SOURCES})
-target_link_libraries(synflood m)
 target_link_libraries(synflood ${LIBNET_LIBS})
 
 add_executable(synflood_test tests/synflood_test.c)
-target_link_libraries(synflood_test m)
 target_link_libraries(synflood_test ${LIBNET_LIBS})
 
 
