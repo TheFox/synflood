@@ -23,7 +23,7 @@
 */
 
 #include "synflood.h"
-	
+
 void usagePrint();
 
 int main(int argc, char **argv){
