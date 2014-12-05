@@ -11,6 +11,7 @@ set(PROJECT_DEFINE_TTL 255)
 set(PROJECT_DEFINE_USLEEP 250)
 set(PROJECT_DEFINE_ARGC_MIN 4)
 
+set(CMAKE_C_FLAGS "-Wall -O3")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 execute_process(COMMAND libnet-config --defines OUTPUT_VARIABLE LIBNET_DEFINES OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -45,9 +46,6 @@ include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_INCLUDE_DIRS})
 include_directories(${STDIO_INCLUDE_PATH})
 include_directories(${LIBNET_INCLUDE_PATH})
-
-add_definitions(-Wall)
-add_definitions(-O3)
 
 add_executable(synflood ${PROJECT_SOURCES})
 target_link_libraries(synflood ${LIBNET_LIBS})
