@@ -9,4 +9,4 @@
 #include <string.h>
 #include <libnet.h>
 
-#endif /* !_SYNFLOOD_H */
+#endif /* _SYNFLOOD_H */

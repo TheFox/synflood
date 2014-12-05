@@ -3,10 +3,10 @@
 
 int main(int argc, char **argv){
 	
-	printf("%s %d.%d.%d (%s %s)\n", SynFlood_NAME,
-		SynFlood_VERSION_MAJOR, SynFlood_VERSION_MINOR, SynFlood_VERSION_PATCH,
+	printf("%s %d.%d.%d (%s %s)\n", PROJECT_NAME,
+		PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR, PROJECT_VERSION_PATCH,
 		__DATE__, __TIME__);
-	printf("%s\n", SynFlood_COPYRIGHT);
+	printf("%s\n", PROJECT_COPYRIGHT);
 	printf("\n");
 	
 	printf("getuid: %p\n", getuid);
