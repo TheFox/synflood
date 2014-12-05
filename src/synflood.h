@@ -9,4 +9,6 @@
 #include <string.h>
 #include <libnet.h>
 
+void usagePrint();
+
 #endif /* _SYNFLOOD_H */

@@ -24,8 +24,6 @@
 
 #include "synflood.h"
 
-void usagePrint();
-
 int main(int argc, char **argv){
 	
 	unsigned int connections = 0;
