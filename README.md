@@ -17,7 +17,7 @@ Start a SYN flood attack to an ip address.
 
 2. In `synflood` directory, make:
 	
-		cmake . && make && make test
+		mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make && make test
 
 3. Done.
 
