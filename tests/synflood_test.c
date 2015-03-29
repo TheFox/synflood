@@ -9,6 +9,13 @@ int main(int argc, char **argv){
 	printf("%s\n", PROJECT_COPYRIGHT);
 	puts("");
 	
+#ifdef DEBUG
+	puts("is DEBUG");
+#else
+	puts("NOT DEBUG");
+#endif
+	puts("");
+	
 	printf("getuid: %p\n", getuid);
 	printf("user: %d\n", getuid());
 	printf("atoi(): %p\n", atoi);
