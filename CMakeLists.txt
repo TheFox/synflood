@@ -27,7 +27,7 @@ endif()
 if(EXIT_ON_FAIL)
 	set(PROJECT_DEFINE_EXIT_ON_FAIL "#define EXIT_ON_FAIL")
 endif()
-configure_file("${PROJECT_SOURCE_DIR}/src/config.h.in" "${PROJECT_SOURCE_DIR}/src/config.h")
+configure_file("${PROJECT_SOURCE_DIR}/src/config.h.in" "${PROJECT_BINARY_DIR}/src/config.h")
 
 file(GLOB_RECURSE PROJECT_SOURCES "src/*.c")
 
@@ -42,6 +42,7 @@ endforeach()
 list(REMOVE_DUPLICATES PROJECT_INCLUDE_DIRS)
 
 include_directories(${PROJECT_INCLUDE_DIRS})
+include_directories("${PROJECT_BINARY_DIR}/src")
 include_directories(${STDIO_INCLUDE_PATH})
 include_directories(${LIBNET_INCLUDE_PATH})
 
