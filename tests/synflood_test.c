@@ -1,5 +1,5 @@
 
-#include "../src/synflood.h"
+#include "synflood.h"
 
 int main(int argc, char **argv){
 	
