@@ -4,6 +4,7 @@ Start a SYN flood attack to an ip address.
 
 ## Requirements
 
+- Zig
 - libnet1. `libnet1-dev` under Debian.
 - Root access for sending a packet.
 - Its recommended to block all RST packets from the source host on the source host.
@@ -24,8 +25,10 @@ Start a SYN flood attack to an ip address.
 2. In `synflood` directory, make:
 	
 	```bash
-	mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make && make test
+	zig build
 	```
+	
+	Binary file is available as `zig-out/bin/synflood`.
 
 3. Done.
 

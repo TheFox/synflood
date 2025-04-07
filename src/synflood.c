@@ -22,10 +22,29 @@
 	Under Debian Linux install libnet1-dev.
 */
 
-#include "synflood.h"
+#define PROJECT_NAME "SynFlood"
+#define PROJECT_VERSION_MAJOR 3
+#define PROJECT_VERSION_MINOR 0
+#define PROJECT_VERSION_PATCH 0
+#define PROJECT_VERSION_PREFIX "-dev.1"
+#define PROJECT_COPYRIGHT "Copyright (C) 2010 Christian Mayer <http://fox21.at>"
+
+// #define DEBUG
+#define SRC_PORT_RND
+#define EXIT_ON_FAIL
+#define TTL 255
+#define USLEEP 250
+#define ARGC_MIN 4
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <libnet.h>
+
+void usagePrint();
 
 int main(int argc, char **argv){
-	
 	unsigned int connections = 0;
 	unsigned int connectionsc;
 	int sockWriteBytes;
@@ -39,10 +58,10 @@ int main(int argc, char **argv){
 	libnet_t *net = NULL;
 	libnet_ptag_t ipv4 = 0, tcp = 0;
 	
-	printf("%s %d.%d.%d (%s %s)\n", PROJECT_NAME,
-		PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR, PROJECT_VERSION_PATCH,
-		__DATE__, __TIME__);
+	printf("%s %d.%d.%d%s\n", PROJECT_NAME,
+		PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR, PROJECT_VERSION_PATCH, PROJECT_VERSION_PREFIX);
 	printf("%s\n", PROJECT_COPYRIGHT);
+	printf("%s\n", libnet_version());
 	puts("");
 	
 	if(argc < ARGC_MIN)
