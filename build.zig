@@ -5,30 +5,39 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    const exe = b.addExecutable(.{
-        .name = "synflood",
+    const exez = b.addExecutable(.{
+        .name = "synfloodz",
         .target = target,
         .optimize = optimize,
+        .root_source_file = b.path("src/synflood.zig"),
     });
+    exez.linkSystemLibrary("net");
+    b.installArtifact(exez);
 
-    exe.addCSourceFiles(.{
-        .files = &[_][]const u8{
-            "src/synflood.c",
-        },
-        .language = .c,
-    });
-    exe.linkLibC();
-    exe.linkSystemLibrary("net");
+    // const exec = b.addExecutable(.{
+    //     .name = "synfloodc",
+    //     .target = target,
+    //     .optimize = optimize,
+    // });
 
-    b.installArtifact(exe);
+    // exec.addCSourceFiles(.{
+    //     .files = &[_][]const u8{
+    //         "src/synflood.c",
+    //     },
+    //     .language = .c,
+    // });
+    // exec.linkLibC();
+    // exec.linkSystemLibrary("net");
 
-    const run_cmd = b.addRunArtifact(exe);
-    run_cmd.step.dependOn(b.getInstallStep());
+    // b.installArtifact(exec);
 
-    if (b.args) |args| {
-        run_cmd.addArgs(args);
-    }
+    // const run_cmd = b.addRunArtifact(exec);
+    // run_cmd.step.dependOn(b.getInstallStep());
 
-    const run_step = b.step("run", "Run the app");
-    run_step.dependOn(&run_cmd.step);
+    // if (b.args) |args| {
+    //     run_cmd.addArgs(args);
+    // }
+
+    // const run_step = b.step("run", "Run the app");
+    // run_step.dependOn(&run_cmd.step);
 }
