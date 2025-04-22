@@ -10,6 +10,7 @@ jobs:
     strategy:
       matrix:
         zig-version:
+          - '0.13.0'
           - '0.14.0'
 
     steps:
@@ -31,3 +32,6 @@ jobs:
 
       - name: Build
         run: zig build
+
+      - name: Check help
+        run: ./zig-out/bin/synflood --help
