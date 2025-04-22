@@ -28,7 +28,7 @@ pub fn main() !void {
     var stdout = std.io.getStdOut().writer();
     var stderr = std.io.getStdErr().writer();
 
-    try stdout.print("SynFlood 3.0.0-dev.1\n", .{});
+    try stdout.print("SynFlood 3.0.0\n", .{});
     try stdout.print("Copyright (C) 2010 Christian Mayer <https://fox21.at>\n", .{});
     try stdout.print("{s}\n", .{c_libnet.libnet_version()});
 
