@@ -2,7 +2,7 @@ name: SynFlood
 
 on:
   push:
-    branches: [feature/zig-rewrite]
+    branches: [master]
 
 jobs:
   test:
