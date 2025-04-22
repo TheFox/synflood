@@ -10,6 +10,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .root_source_file = b.path("src/synflood.zig"),
+        .link_libc = true,
     });
     exe.linkSystemLibrary("net");
     b.installArtifact(exe);
