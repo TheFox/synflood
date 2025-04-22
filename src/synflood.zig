@@ -147,7 +147,7 @@ fn print_help() !void {
     var stdout = std.io.getStdOut().writer();
 
     const help =
-        \\Usage: synflood [-h|--help] -s <IP> -d <IP> -p <PORT> -c <NUM>
+        \\Usage: synflood [-h|--help] -s <IP> -d <IP> -p <PORT> [-c <NUM>]
         \\
         \\Options:
         \\-h, --help         Print this help.
