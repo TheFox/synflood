@@ -5,7 +5,9 @@ Start a SYN flood attack to an ip address.
 ## Requirements
 
 - Zig
-- libnet1. `libnet1-dev` under Debian.
+- libnet
+	- `libnet1-dev` under Debian: `apt-get install libnet1-dev`
+	- `libnet` under macOS: `brew install -s libnet`
 - Root access for sending a packet.
 - Its recommended to block all RST packets from the source host on the source host.
 	
@@ -35,17 +37,17 @@ Start a SYN flood attack to an ip address.
 ## Usage
 
 ```bash
-./synflood SRC DST DPT [CONNECTIONS]
+synflood [-h|--help] -s <IP> -d <IP> -p <PORT> -c <NUM>
 ```
 
-- `SRC`: Source IP address.
-- `DST`: Destination IP address.
-- `DPT`: Destination port.
-- `CONNECTIONS`: Number of connections.
+- `-s`: Source IP address.
+- `-d`: Destination IP address.
+- `-p`: Destination port.
+- `-c`: Number of connections.
 
 Examples:
 
 ```bash
-./synflood 192.168.241.31 192.168.1.3 80
-./synflood 192.168.241.31 192.168.1.3 80 1000
+./synflood -s 192.168.241.31 -d 192.168.1.3 -p 80
+./synflood -s 192.168.241.31 -d 192.168.1.3 -p 80 -c 1000
 ```

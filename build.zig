@@ -5,16 +5,16 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    const exez = b.addExecutable(.{
+    const exe = b.addExecutable(.{
         .name = "synflood",
         .target = target,
         .optimize = optimize,
         .root_source_file = b.path("src/synflood.zig"),
     });
-    exez.linkSystemLibrary("net");
-    b.installArtifact(exez);
+    exe.linkSystemLibrary("net");
+    b.installArtifact(exe);
 
-    const run_cmd = b.addRunArtifact(exez);
+    const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
 
     if (b.args) |args| {
