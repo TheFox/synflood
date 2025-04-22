@@ -1,0 +1,32 @@
+name: Zig Test
+
+on:
+  push:
+    branches: [feature/zig-rewrite]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        zig-version: [0.13.0, 0.14.0]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install libnet
+        run: sudo apt-get update && sudo apt-get install -y libnet-dev
+
+      - name: Download Zig ${{ matrix.zig-version }}
+        run: |
+          ZIG_VERSION=${{ matrix.zig-version }}
+          ZIG_URL="https://ziglang.org/download/${ZIG_VERSION}/zig-linux-x86_64-${ZIG_VERSION}.tar.xz"
+          curl -L "${ZIG_URL}" | tar -xJ
+          echo "$(pwd)/zig-linux-x86_64-${ZIG_VERSION}" >> ${GITHUB_PATH}
+
+      - name: Check Zig version
+        run: zig version
+
+      - name: Build
+        run: zig build
