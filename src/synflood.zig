@@ -86,10 +86,8 @@ pub fn main() !void {
     }
 
     const src_ip = c_libnet.libnet_name2addr4(net, source_ip_s.ptr, c_libnet.LIBNET_RESOLVE);
-    try stdout.print("src_ip:  {d}\n", .{src_ip});
 
     const dest_ip = c_libnet.libnet_name2addr4(net, destination_ip_s.ptr, c_libnet.LIBNET_RESOLVE);
-    try stdout.print("dest_ip: {d}\n", .{dest_ip});
 
     var ipv4: c_libnet.libnet_ptag_t = 0;
     var tcp: c_libnet.libnet_ptag_t = 0;
