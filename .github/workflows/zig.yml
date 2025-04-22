@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install libnet
-        run: sudo apt-get update && sudo apt-get install -y libnet-dev
+        run: apt-get update && apt-get install -y libnet1-dev
 
       - name: Download Zig ${{ matrix.zig-version }}
         run: |
