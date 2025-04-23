@@ -16,6 +16,10 @@ Start a SYN flood attack to an ip address.
 	iptables -I OUTPUT -p tcp --dport 80 --tcp-flags RST ACK -j DROP
 	```
 
+## Download
+
+Download the latest binaries from [version 3](https://github.com/TheFox/synflood/releases/tag/v3.0.0).
+
 ## Build
 
 1. Clone:
