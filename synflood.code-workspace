@@ -10,7 +10,7 @@
 			{
 				"label": "Build",
 				"type": "shell",
-				"command": "zig build --summary all --release=fast",
+				"command": "zig build --summary all --release small",
 				"group": {
 					"kind": "build",
 					"isDefault": true
