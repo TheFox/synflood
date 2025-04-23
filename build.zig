@@ -1,12 +1,27 @@
 const std = @import("std");
 const print = std.debug.print;
+const allocPrint = std.fmt.allocPrint;
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    print("target arch: {s}\n", .{@tagName(target.result.cpu.arch)});
+    print("target os: {s}\n", .{@tagName(target.result.os.tag)});
+    print("optimize: {s}\n", .{@tagName(optimize)});
+
+    const target_name = allocPrint(
+        b.allocator,
+        "synflood-{s}-{s}",
+        .{
+            @tagName(target.result.cpu.arch),
+            @tagName(target.result.os.tag),
+        },
+    ) catch @panic("failed to allocate target name");
+    print("target_name: {s}\n", .{target_name});
+
     const exe = b.addExecutable(.{
-        .name = "synflood",
+        .name = target_name,
         .target = target,
         .optimize = optimize,
         .root_source_file = b.path("src/synflood.zig"),
