@@ -18,7 +18,7 @@ pub fn build(b: *std.Build) void {
             @tagName(target.result.os.tag),
         },
     ) catch @panic("failed to allocate target name");
-    print("target_name: {s}\n", .{target_name});
+    print("target name: {s}\n", .{target_name});
 
     const exe = b.addExecutable(.{
         .name = target_name,
