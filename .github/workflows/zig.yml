@@ -25,7 +25,7 @@ jobs:
         run: |
           ZIG_VERSION=${{ matrix.zig-version }}
           ZIG_URL="https://ziglang.org/download/${ZIG_VERSION}/zig-linux-x86_64-${ZIG_VERSION}.tar.xz"
-          curl -L "${ZIG_URL}" | tar -xJ
+          curl -s -L "${ZIG_URL}" | tar -xJ
           echo "$(pwd)/zig-linux-x86_64-${ZIG_VERSION}" >> ${GITHUB_PATH}
 
       - name: Check Zig version
