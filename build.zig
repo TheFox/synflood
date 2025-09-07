@@ -3,14 +3,19 @@ const print = std.debug.print;
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
-    const optimize = b.standardOptimizeOption(.{});
+    const optimize = b.standardOptimizeOption(.{
+        .preferred_optimize_mode = .ReleaseSmall,
+    });
 
     const exe = b.addExecutable(.{
         .name = "synflood",
-        .target = target,
-        .optimize = optimize,
-        .root_source_file = b.path("src/synflood.zig"),
-        .link_libc = true,
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/synflood.zig"),
+            .target = target,
+            .optimize = optimize,
+            .strip = optimize != .Debug,
+            .link_libc = true,
+        }),
     });
     exe.linkSystemLibrary("net");
     b.installArtifact(exe);

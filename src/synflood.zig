@@ -1,5 +1,6 @@
 const std = @import("std");
-
+const File = std.fs.File;
+const Writer = std.Io.Writer;
 const c_stdlib = @cImport(@cInclude("stdlib.h"));
 const c_stdio = @cImport(@cInclude("stdio.h"));
 const c_unistd = @cImport(@cInclude("unistd.h"));
@@ -25,15 +26,23 @@ pub fn main() !void {
     defer args_iter.deinit();
     _ = args_iter.next();
 
-    var stdout = std.io.getStdOut().writer();
-    var stderr = std.io.getStdErr().writer();
+    var stdout_buffer: [1024]u8 = undefined;
+    var stdout_writer = File.stdout().writer(&stdout_buffer);
+    const stdout = &stdout_writer.interface;
+
+    var stderr_buffer: [1024]u8 = undefined;
+    var stderr_writer = File.stderr().writer(&stderr_buffer);
+    const stderr = &stderr_writer.interface;
+
+    // var stdout = std.io.getStdOut().writer();
+    // var stderr = std.io.getStdErr().writer();
 
     try stdout.print("SynFlood 3.0.0-dev.1\n", .{});
     try stdout.print("Copyright (C) 2010 Christian Mayer <https://fox21.at>\n", .{});
     try stdout.print("{s}\n", .{c_libnet.libnet_version()});
 
     if (args.len == 1) {
-        try print_help();
+        try print_help(stdout);
         return;
     }
 
@@ -45,7 +54,7 @@ pub fn main() !void {
     var connections: usize = 1;
     while (args_iter.next()) |arg| {
         if (eql(u8, arg, "-h") or eql(u8, arg, "--help")) {
-            try print_help();
+            try print_help(stdout);
             return;
         } else if (eql(u8, arg, "-s")) {
             if (args_iter.next()) |next| {
@@ -143,9 +152,7 @@ pub fn main() !void {
     }
 }
 
-fn print_help() !void {
-    var stdout = std.io.getStdOut().writer();
-
+fn print_help(stdout: *Writer) !void {
     const help =
         \\Usage: synflood [-h|--help] -s <IP> -d <IP> -p <PORT> -c <NUM>
         \\
@@ -157,4 +164,5 @@ fn print_help() !void {
         \\-c <NUM>           Number of connections.
     ;
     try stdout.print(help ++ "\n", .{});
+    try stdout.flush();
 }
