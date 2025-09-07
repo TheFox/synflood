@@ -4,7 +4,9 @@ const allocPrint = std.fmt.allocPrint;
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
-    const optimize = b.standardOptimizeOption(.{});
+    const optimize = b.standardOptimizeOption(.{
+        .preferred_optimize_mode = .ReleaseSmall,
+    });
 
     print("target arch: {s}\n", .{@tagName(target.result.cpu.arch)});
     print("target os: {s}\n", .{@tagName(target.result.os.tag)});
@@ -21,11 +23,14 @@ pub fn build(b: *std.Build) void {
     print("target name: {s}\n", .{target_name});
 
     const exe = b.addExecutable(.{
-        .name = target_name,
-        .target = target,
-        .optimize = optimize,
-        .root_source_file = b.path("src/synflood.zig"),
-        .link_libc = true,
+        .name = "synflood",
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/synflood.zig"),
+            .target = target,
+            .optimize = optimize,
+            .strip = optimize != .Debug,
+            .link_libc = true,
+        }),
     });
     exe.linkSystemLibrary("net");
     b.installArtifact(exe);
