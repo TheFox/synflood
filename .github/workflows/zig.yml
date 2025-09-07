@@ -22,7 +22,7 @@ jobs:
       - name: Download Zig ${{ matrix.zig-version }}
         run: |
           ZIG_VERSION=${{ matrix.zig-version }}
-          ZIG_URL="https://ziglang.org/download/${ZIG_VERSION}/zig-linux-x86_64-${ZIG_VERSION}.tar.xz"
+          ZIG_URL="https://ziglang.org/download/${ZIG_VERSION}/zig-x86-linux-${ZIG_VERSION}.tar.xz"
           curl -s -L "${ZIG_URL}" | tar -xJ
           echo "$(pwd)/zig-linux-x86_64-${ZIG_VERSION}" >> ${GITHUB_PATH}
 
