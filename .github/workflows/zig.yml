@@ -29,6 +29,7 @@ jobs:
           echo ${GITHUB_PATH}
           cat ${GITHUB_PATH}
           echo "$(pwd)/zig-linux-${ZIG_VERSION}" >> ${GITHUB_PATH}
+          cat ${GITHUB_PATH}
 
       - name: Check Zig version
         run: zig version
