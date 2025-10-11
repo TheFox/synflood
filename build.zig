@@ -9,6 +9,7 @@ pub fn build(b: *std.Build) void {
     });
 
     print("target arch: {s}\n", .{@tagName(target.result.cpu.arch)});
+    print("target cpu: {s}\n", .{target.result.cpu.model.name});
     print("target os: {s}\n", .{@tagName(target.result.os.tag)});
     print("optimize: {s}\n", .{@tagName(optimize)});
 
