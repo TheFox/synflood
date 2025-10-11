@@ -1,3 +1,4 @@
+const VERSION = "3.0.0";
 const std = @import("std");
 const File = std.fs.File;
 const Writer = std.Io.Writer;
@@ -34,7 +35,7 @@ pub fn main() !void {
     var stderr_writer = File.stderr().writer(&stderr_buffer);
     const stderr = &stderr_writer.interface;
 
-    try stdout.print("SynFlood 3.0.0\n", .{});
+    try stdout.print("SynFlood " ++ VERSION ++ "\n", .{});
     try stdout.print("Copyright (C) 2010 Christian Mayer <https://fox21.at>\n", .{});
     try stdout.print("{s}\n", .{c_libnet.libnet_version()});
     try stdout.flush();

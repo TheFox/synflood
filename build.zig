@@ -3,6 +3,11 @@ const print = std.debug.print;
 const allocPrint = std.fmt.allocPrint;
 
 pub fn build(b: *std.Build) void {
+    const version: std.SemanticVersion = .{
+        .major = 3,
+        .minor = 0,
+        .patch = 0,
+    };
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{
         .preferred_optimize_mode = .ReleaseSmall,
@@ -25,6 +30,7 @@ pub fn build(b: *std.Build) void {
 
     const exe = b.addExecutable(.{
         .name = "synflood",
+        .version = version,
         .root_module = b.createModule(.{
             .root_source_file = b.path("src/synflood.zig"),
             .target = target,
