@@ -53,6 +53,7 @@ pub fn main() !void {
     var destination_ip_s: []u8 = undefined;
     var destination_port: u16 = 0;
     var connections: usize = 1;
+    var verbose: u8 = 0;
     while (args_iter.next()) |arg| {
         if (eql(u8, arg, "-h") or eql(u8, arg, "--help")) {
             try printHelp(stdout);
@@ -75,11 +76,14 @@ pub fn main() !void {
             if (args_iter.next()) |next| {
                 connections = try parseInt(u16, next, 10);
             }
+        } else if (eql(u8, arg, "-v") or eql(u8, arg, "--verbose")) {
+            verbose += 1;
         }
     }
 
     if (getuid() != 0) {
         try stderr.print("ERROR: You are not root, script kiddie.\n", .{});
+        try stderr.flush();
         exit(1);
     }
 
@@ -87,12 +91,14 @@ pub fn main() !void {
     try stdout.print("destination ip: {s}\n", .{destination_ip_s});
     try stdout.print("destination port: {d}\n", .{destination_port});
     try stdout.print("connections: {d}\n", .{connections});
+    try stdout.print("verbose: {d}\n", .{verbose});
     try stdout.flush();
 
     var errbuf: [c_libnet.LIBNET_ERRBUF_SIZE]u8 = undefined;
     const net = c_libnet.libnet_init(c_libnet.LIBNET_RAW4, null, &errbuf[0]);
     if (net == null) {
-        std.debug.print("libnet_init error: {s}\n", .{errbuf});
+        try stderr.print("ERROR libnet_init: {s}\n", .{errbuf});
+        try stderr.flush();
         return;
     }
 
@@ -104,9 +110,11 @@ pub fn main() !void {
     var tcp: c_libnet.libnet_ptag_t = 0;
     var sock_written: c_int = 0;
 
-    for (0..connections) |c| {
-        try stdout.print("connection: {d} ... ", .{c});
-        try stdout.flush();
+    for (0..connections) |conn_id| {
+        if (verbose >= 1) {
+            try stdout.print("[ ] connection: {d} ...", .{conn_id});
+            try stdout.flush();
+        }
 
         const src_port: u16 = @intCast(libnet_get_prand(c_libnet.LIBNET_PRu16));
         const src_seq = libnet_get_prand(c_libnet.LIBNET_PRu16);
@@ -125,7 +133,7 @@ pub fn main() !void {
             net, tcp // ptag
         );
         if (tcp == -1) {
-            try stderr.print("\nERROR: libnet_build_tcp: {s}\n", .{c_libnet.libnet_geterror(net)});
+            try stderr.print("\nERROR libnet_build_tcp: {s}\n", .{c_libnet.libnet_geterror(net)});
             try stderr.flush();
         }
 
@@ -143,17 +151,19 @@ pub fn main() !void {
             0, // payload size
             net, ipv4);
         if (ipv4 == -1) {
-            try stderr.print("\nERROR: libnet_build_ipv4: {s}\n", .{c_libnet.libnet_geterror(net)});
+            try stderr.print("\nERROR libnet_build_ipv4: {s}\n", .{c_libnet.libnet_geterror(net)});
             try stderr.flush();
         }
 
         sock_written = c_libnet.libnet_write(net);
         if (sock_written == -1) {
-            try stderr.print("\nERROR: libnet_write: {s}\n", .{c_libnet.libnet_geterror(net)});
+            try stderr.print("\nERROR libnet_write: {s}\n", .{c_libnet.libnet_geterror(net)});
             try stderr.flush();
         }
-        try stdout.print("socket written: {d}\n", .{sock_written});
-        try stdout.flush();
+        if (verbose >= 1) {
+            try stdout.print("\r[+] connection: {d}, socket written: {d}\n", .{ conn_id, sock_written });
+            try stdout.flush();
+        }
     }
 }
 
@@ -167,6 +177,7 @@ fn printHelp(stdout: *Writer) !void {
         \\-d <IP>            Destination IP-address.
         \\-p <PORT>          Destination port.
         \\-c <NUM>           Number of connections.
+        \\-v, --verbose      Verbose output.
     ;
     try stdout.print(help ++ "\n", .{});
     try stdout.flush();
