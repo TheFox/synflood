@@ -6,7 +6,8 @@ pub fn build(b: *std.Build) void {
     const version: std.SemanticVersion = .{
         .major = 3,
         .minor = 0,
-        .patch = 0,
+        .patch = 1,
+        .pre = "dev",
     };
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{
