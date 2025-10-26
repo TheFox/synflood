@@ -43,7 +43,7 @@ pub fn main() !void {
     try stdout.flush();
 
     if (args.len == 1) {
-        try print_help(stdout);
+        try printHelp(stdout);
         return;
     }
 
@@ -55,7 +55,7 @@ pub fn main() !void {
     var connections: usize = 1;
     while (args_iter.next()) |arg| {
         if (eql(u8, arg, "-h") or eql(u8, arg, "--help")) {
-            try print_help(stdout);
+            try printHelp(stdout);
             return;
         } else if (eql(u8, arg, "-s")) {
             if (args_iter.next()) |next| {
@@ -157,7 +157,7 @@ pub fn main() !void {
     }
 }
 
-fn print_help(stdout: *Writer) !void {
+fn printHelp(stdout: *Writer) !void {
     const help =
         \\Usage: synflood [-h|--help] -s <IP> -d <IP> -p <PORT> [-c <NUM>]
         \\
