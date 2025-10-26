@@ -36,4 +36,6 @@ jobs:
         run: zig build
 
       - name: Check help
-        run: ./zig-out/bin/synflood-x86_64-linux --help
+        run: |
+          ls -la ./zig-out/bin
+          ./zig-out/bin/synflood-x86_64-linux --help
