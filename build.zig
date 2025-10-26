@@ -29,7 +29,7 @@ pub fn build(b: *std.Build) void {
     print("target name: {s}\n", .{target_name});
 
     const exe = b.addExecutable(.{
-        .name = "synflood",
+        .name = target_name,
         .version = version,
         .root_module = b.createModule(.{
             .root_source_file = b.path("src/synflood.zig"),
