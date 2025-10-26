@@ -33,7 +33,7 @@ jobs:
         run: zig version
 
       - name: Build
-        run: zig build
+        run: zig build --release
 
       - name: Check help
         run: |
