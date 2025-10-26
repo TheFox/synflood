@@ -74,7 +74,7 @@ pub fn main() !void {
             }
         } else if (eql(u8, arg, "-c")) {
             if (args_iter.next()) |next| {
-                connections = try parseInt(u16, next, 10);
+                connections = try parseInt(usize, next, 10);
             }
         } else if (eql(u8, arg, "-v") or eql(u8, arg, "--verbose")) {
             verbose += 1;
@@ -103,11 +103,9 @@ pub fn main() !void {
     }
 
     const src_ip = c_libnet.libnet_name2addr4(net, source_ip_s.ptr, c_libnet.LIBNET_RESOLVE);
-
     const dest_ip = c_libnet.libnet_name2addr4(net, destination_ip_s.ptr, c_libnet.LIBNET_RESOLVE);
-
-    var ipv4: c_libnet.libnet_ptag_t = 0;
     var tcp: c_libnet.libnet_ptag_t = 0;
+    var ipv4: c_libnet.libnet_ptag_t = 0;
     var sock_written: c_int = 0;
 
     for (0..connections) |conn_id| {
@@ -135,14 +133,15 @@ pub fn main() !void {
         if (tcp == -1) {
             try stderr.print("\nERROR libnet_build_tcp: {s}\n", .{c_libnet.libnet_geterror(net)});
             try stderr.flush();
+            break;
         }
 
         const ip_id: u16 = @intCast(libnet_get_prand(c_libnet.LIBNET_PRu16));
-        ipv4 = c_libnet.libnet_build_ipv4(c_libnet.LIBNET_IPV4_H, // len
+        ipv4 = c_libnet.libnet_build_ipv4(c_libnet.LIBNET_IPV4_H + c_libnet.LIBNET_TCP_H, // len
             0, // tos
             ip_id, // ip id
             c_libnet.IP_DF, // frag
-            255, // ttl
+            64, // ttl
             c_libnet.IPPROTO_TCP, // upper layer protocol
             0, // checksum
             src_ip, // src ip
@@ -153,12 +152,14 @@ pub fn main() !void {
         if (ipv4 == -1) {
             try stderr.print("\nERROR libnet_build_ipv4: {s}\n", .{c_libnet.libnet_geterror(net)});
             try stderr.flush();
+            break;
         }
 
         sock_written = c_libnet.libnet_write(net);
         if (sock_written == -1) {
             try stderr.print("\nERROR libnet_write: {s}\n", .{c_libnet.libnet_geterror(net)});
             try stderr.flush();
+            break;
         }
         if (verbose >= 1) {
             try stdout.print("\r[+] connection: {d}, socket written: {d}\n", .{ conn_id, sock_written });

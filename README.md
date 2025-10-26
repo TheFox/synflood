@@ -55,3 +55,9 @@ Examples:
 ./synflood -s 192.168.241.31 -d 192.168.1.3 -p 80
 ./synflood -s 192.168.241.31 -d 192.168.1.3 -p 80 -c 1000
 ```
+
+## Debug
+
+```bash
+sudo tcpdump -ni en0 'tcp and host <IP>'
+```
