@@ -27,11 +27,13 @@ pub fn main() !void {
     defer args_iter.deinit();
     _ = args_iter.next();
 
-    var stdout_buffer: [1024]u8 = undefined;
+    const stdout_buffer = allocator.alloc(u8, 1024);
+    defer allocator.free(stdout_buffer);
     var stdout_writer = File.stdout().writer(&stdout_buffer);
     const stdout = &stdout_writer.interface;
 
-    var stderr_buffer: [1024]u8 = undefined;
+    const stderr_buffer = allocator.alloc(u8, 1024);
+    defer allocator.free(stderr_buffer);
     var stderr_writer = File.stderr().writer(&stderr_buffer);
     const stderr = &stderr_writer.interface;
 
