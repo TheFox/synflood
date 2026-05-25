@@ -5,8 +5,9 @@ const allocPrint = std.fmt.allocPrint;
 pub fn build(b: *std.Build) void {
     const version: std.SemanticVersion = .{
         .major = 3,
-        .minor = 0,
-        .patch = 1,
+        .minor = 1,
+        .patch = 0,
+        .pre = "dev.1",
     };
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{
@@ -28,18 +29,20 @@ pub fn build(b: *std.Build) void {
     ) catch @panic("failed to allocate target name");
     print("target name: {s}\n", .{target_name});
 
+    const exe_mod = b.createModule(.{
+        .root_source_file = b.path("src/synflood.zig"),
+        .target = target,
+        .optimize = optimize,
+        .strip = optimize != .Debug,
+        .link_libc = true,
+    });
+    exe_mod.linkSystemLibrary("net", .{});
+
     const exe = b.addExecutable(.{
         .name = target_name,
         .version = version,
-        .root_module = b.createModule(.{
-            .root_source_file = b.path("src/synflood.zig"),
-            .target = target,
-            .optimize = optimize,
-            .strip = optimize != .Debug,
-            .link_libc = true,
-        }),
+        .root_module = exe_mod,
     });
-    exe.linkSystemLibrary("net");
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);

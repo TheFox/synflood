@@ -1,6 +1,6 @@
 const VERSION = "3.0.1";
 const std = @import("std");
-const File = std.fs.File;
+const File = std.Io.File;
 const Writer = std.Io.Writer;
 const c_stdlib = @cImport(@cInclude("stdlib.h"));
 const c_stdio = @cImport(@cInclude("stdio.h"));
@@ -15,26 +15,23 @@ const parseInt = std.fmt.parseInt;
 
 extern fn libnet_get_prand(prand_type: c_int) c_uint;
 
-pub fn main() !void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const allocator = gpa.allocator();
-    defer _ = gpa.deinit();
+pub fn main(init: std.process.Init) !void {
+    const minimal = init.minimal;
+    const allocator = init.arena.allocator();
 
-    const args = try std.process.argsAlloc(allocator);
-    defer std.process.argsFree(allocator, args);
-
-    var args_iter = try std.process.argsWithAllocator(allocator);
+    const args = try minimal.args.toSlice(allocator);
+    var args_iter = minimal.args.iterate();
     defer args_iter.deinit();
     _ = args_iter.next();
 
     const stdout_buffer = try allocator.alloc(u8, 1024);
     defer allocator.free(stdout_buffer);
-    var stdout_writer = File.stdout().writer(stdout_buffer);
+    var stdout_writer = File.stdout().writer(init.io, stdout_buffer);
     const stdout = &stdout_writer.interface;
 
     const stderr_buffer = try allocator.alloc(u8, 1024);
     defer allocator.free(stderr_buffer);
-    var stderr_writer = File.stderr().writer(stderr_buffer);
+    var stderr_writer = File.stderr().writer(init.io, stderr_buffer);
     const stderr = &stderr_writer.interface;
 
     try stdout.print("SynFlood " ++ VERSION ++ "\n", .{});
