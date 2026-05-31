@@ -1,4 +1,4 @@
-const VERSION = "3.0.1";
+const VERSION = "3.1.0";
 const std = @import("std");
 const File = std.Io.File;
 const Writer = std.Io.Writer;

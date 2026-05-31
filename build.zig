@@ -3,11 +3,10 @@ const print = std.debug.print;
 const allocPrint = std.fmt.allocPrint;
 
 pub fn build(b: *std.Build) void {
-    const version: std.SemanticVersion = .{
+    const version: std.SemanticVersion = .{ // VERSION
         .major = 3,
         .minor = 1,
         .patch = 0,
-        .pre = "dev.1",
     };
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{
