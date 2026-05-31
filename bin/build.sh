@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-zig build --verbose --summary all --release
+zig build install --verbose --summary all --release

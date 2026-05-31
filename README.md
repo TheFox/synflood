@@ -31,7 +31,7 @@ Download the latest binaries from [version 3](https://github.com/TheFox/synflood
 2. In `synflood` directory, make:
 	
 	```bash
-	zig build
+	zig build install --release
 	```
 	
 	Binary file is available as `zig-out/bin/synflood`.
