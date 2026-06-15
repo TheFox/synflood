@@ -1,32 +1,25 @@
 const std = @import("std");
 const print = std.debug.print;
-const allocPrint = std.fmt.allocPrint;
 
-pub fn build(b: *std.Build) void {
+pub fn build(b: *std.Build) !void {
     const version: std.SemanticVersion = .{ // VERSION
         .major = 3,
-        .minor = 1,
+        .minor = 2,
         .patch = 0,
+        .pre = "dev.1",
     };
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{
         .preferred_optimize_mode = .ReleaseSmall,
     });
 
+    const target_name = try std.fmt.allocPrint(b.allocator, "synflood-{s}-{s}", .{ @tagName(target.result.cpu.arch), @tagName(target.result.os.tag) });
+
     print("target arch: {s}\n", .{@tagName(target.result.cpu.arch)});
     print("target cpu: {s}\n", .{target.result.cpu.model.name});
     print("target os: {s}\n", .{@tagName(target.result.os.tag)});
-    print("optimize: {s}\n", .{@tagName(optimize)});
-
-    const target_name = allocPrint(
-        b.allocator,
-        "synflood-{s}-{s}",
-        .{
-            @tagName(target.result.cpu.arch),
-            @tagName(target.result.os.tag),
-        },
-    ) catch @panic("failed to allocate target name");
     print("target name: {s}\n", .{target_name});
+    print("optimize: {s}\n", .{@tagName(optimize)});
 
     const exe_mod = b.createModule(.{
         .root_source_file = b.path("src/synflood.zig"),
