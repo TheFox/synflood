@@ -10,7 +10,7 @@ pub fn build(b: *std.Build) !void {
     };
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{
-        .preferred_optimize_mode = .ReleaseSmall,
+        .preferred_optimize_mode = .small,
     });
 
     const target_name = try std.fmt.allocPrint(b.allocator, "synflood-{s}-{s}", .{ @tagName(target.result.cpu.arch), @tagName(target.result.os.tag) });
