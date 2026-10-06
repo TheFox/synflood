@@ -6,7 +6,7 @@ pub fn build(b: *std.Build) !void {
         .major = 3,
         .minor = 2,
         .patch = 0,
-        .pre = "dev.1",
+        .pre = "dev.2",
     };
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{
@@ -21,12 +21,24 @@ pub fn build(b: *std.Build) !void {
     print("target name: {s}\n", .{target_name});
     print("optimize: {s}\n", .{@tagName(optimize)});
 
+    const translate_c = b.addTranslateC(.{
+        .root_source_file = b.path("src/c.h"),
+        .target = target,
+        .optimize = optimize,
+    });
+
     const exe_mod = b.createModule(.{
         .root_source_file = b.path("src/synflood.zig"),
         .target = target,
         .optimize = optimize,
-        .strip = optimize != .Debug,
+        .strip = optimize != .debug,
         .link_libc = true,
+        .imports = &.{
+            .{
+                .name = "c",
+                .module = translate_c.createModule(),
+            },
+        },
     });
     exe_mod.linkSystemLibrary("net", .{});
 
@@ -39,10 +51,7 @@ pub fn build(b: *std.Build) !void {
 
     const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
-
-    if (b.args) |args| {
-        run_cmd.addArgs(args);
-    }
+    run_cmd.addPassthruArgs();
 
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
