@@ -10,20 +10,20 @@ const parseInt = std.fmt.parseInt;
 
 pub fn main(init: std.process.Init) !u8 {
     const minimal = init.minimal;
-    const allocator = init.arena.allocator();
+    const gpa = init.arena.allocator();
 
-    const args = try minimal.args.toSlice(allocator);
+    const args = try minimal.args.toSlice(gpa);
     var args_iter = minimal.args.iterate();
     defer args_iter.deinit();
     _ = args_iter.next();
 
-    const stdout_buffer = try allocator.alloc(u8, 1024);
-    defer allocator.free(stdout_buffer);
+    const stdout_buffer = try gpa.alloc(u8, 1024);
+    defer gpa.free(stdout_buffer);
     var stdout_writer = File.stdout().writer(init.io, stdout_buffer);
     const stdout = &stdout_writer.interface;
 
-    const stderr_buffer = try allocator.alloc(u8, 1024);
-    defer allocator.free(stderr_buffer);
+    const stderr_buffer = try gpa.alloc(u8, 1024);
+    defer gpa.free(stderr_buffer);
     var stderr_writer = File.stderr().writer(init.io, stderr_buffer);
     const stderr = &stderr_writer.interface;
 
