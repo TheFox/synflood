@@ -1,4 +1,4 @@
-const VERSION = "3.2.0-dev.2";
+const build_options = @import("build_options");
 const c = @import("c");
 const std = @import("std");
 const File = std.Io.File;
@@ -27,7 +27,7 @@ pub fn main(init: std.process.Init) !u8 {
     var stderr_writer = File.stderr().writer(init.io, stderr_buffer);
     const stderr = &stderr_writer.interface;
 
-    try stdout.print("SynFlood " ++ VERSION ++ "\n", .{});
+    try stdout.print("SynFlood " ++ build_options.VERSION ++ "\n", .{});
     try stdout.print("Copyright (C) 2010 Christian Mayer <https://fox21.at>\n", .{});
     try stdout.print("{s}\n", .{c.libnet_version()});
     try stdout.flush();
