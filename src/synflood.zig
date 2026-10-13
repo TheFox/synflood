@@ -68,13 +68,17 @@ pub fn main(init: std.process.Init) !u8 {
             }
         } else if (eql(u8, arg, "-v") or eql(u8, arg, "--verbose")) {
             verbose += 1;
+        } else {
+            try stderr.print("ERROR: unknown argument: {s}\n", .{arg});
+            try stderr.flush();
+            return 2;
         }
     }
 
     if (std.c.getuid() != 0) {
         try stderr.print("ERROR: You are not root, script kiddie.\n", .{});
         try stderr.flush();
-        return 2;
+        return 3;
     }
 
     try stdout.print("source ip: {s}\n", .{source_ip_s});
@@ -89,7 +93,7 @@ pub fn main(init: std.process.Init) !u8 {
     if (net == null) {
         try stderr.print("ERROR libnet_init: {s}\n", .{errbuf});
         try stderr.flush();
-        return 3;
+        return 4;
     }
 
     const src_ip = c.libnet_name2addr4(net, source_ip_s.ptr, c.LIBNET_RESOLVE);
