@@ -1,4 +1,4 @@
-const VERSION = "3.2.0-dev.2";
+const VERSION = "3.2.0-dev.3";
 const std = @import("std");
 const print = std.debug.print;
 
@@ -28,7 +28,7 @@ pub fn build(b: *std.Build) !void {
     build_options.addOption([]const u8, "VERSION", VERSION);
 
     const exe_mod = b.createModule(.{
-        .root_source_file = b.path("src/synflood.zig"),
+        .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
         .strip = optimize != .debug,
