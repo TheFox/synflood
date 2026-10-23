@@ -1,6 +1,6 @@
 const VERSION = "3.2.0-dev.3";
 const std = @import("std");
-const print = std.debug.print;
+const dprint = std.debug.print;
 
 pub fn build(b: *std.Build) !void {
     const version = try std.SemanticVersion.parse(VERSION);
@@ -11,12 +11,12 @@ pub fn build(b: *std.Build) !void {
 
     const target_name = try std.fmt.allocPrint(b.allocator, "synflood-{s}-{s}", .{ @tagName(target.result.cpu.arch), @tagName(target.result.os.tag) });
 
-    print("version: {s}\n", .{VERSION});
-    print("target arch: {s}\n", .{@tagName(target.result.cpu.arch)});
-    print("target cpu: {s}\n", .{target.result.cpu.model.name});
-    print("target os: {s}\n", .{@tagName(target.result.os.tag)});
-    print("target name: {s}\n", .{target_name});
-    print("optimize: {s}\n", .{@tagName(optimize)});
+    dprint("version: {s}\n", .{VERSION});
+    dprint("target arch: {s}\n", .{@tagName(target.result.cpu.arch)});
+    dprint("target cpu: {s}\n", .{target.result.cpu.model.name});
+    dprint("target os: {s}\n", .{@tagName(target.result.os.tag)});
+    dprint("target name: {s}\n", .{target_name});
+    dprint("optimize: {s}\n", .{@tagName(optimize)});
 
     const translate_c = b.addTranslateC(.{
         .root_source_file = b.path("src/c.h"),

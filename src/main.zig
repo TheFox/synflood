@@ -4,7 +4,6 @@ const std = @import("std");
 const File = std.Io.File;
 const Writer = std.Io.Writer;
 const Allocator = std.mem.Allocator;
-const print = std.debug.print;
 const eql = std.mem.eql;
 const copyf = std.mem.copyForwards;
 const zeroes = std.mem.zeroes;
@@ -32,7 +31,16 @@ const Args = struct {
     destination_port: u16 = 0,
     connections: usize = 1,
 };
-const ArgError = error{ InvalidArgs, HelpRequested } || Allocator.Error || std.fmt.ParseIntError;
+const ArgError = error{
+    InvalidArgs,
+    MissingValue,
+    HelpRequested,
+} || Allocator.Error || std.fmt.ParseIntError;
+
+const ArgsStatus = struct {
+    arg: []const u8 = "",
+};
+var args_status: ArgsStatus = .{};
 
 fn parseArgs(argv: std.process.Args) ArgError!Args {
     var args_iter = argv.iterate();
@@ -42,6 +50,8 @@ fn parseArgs(argv: std.process.Args) ArgError!Args {
     var args: Args = .{};
     while (args_iter.next()) |arg| {
         args.len += 1;
+        args_status.arg = arg;
+
         if (eql(u8, arg, "-h") or eql(u8, arg, "--help")) {
             return error.HelpRequested;
         } else if (eql(u8, arg, "-v") or eql(u8, arg, "--verbose")) {
@@ -50,40 +60,37 @@ fn parseArgs(argv: std.process.Args) ArgError!Args {
             if (args_iter.next()) |next| {
                 copyf(u8, &args.source_ip, next);
                 args.source_ip_s = args.source_ip[0..next.len];
-            }
+            } else return error.MissingValue;
         } else if (eql(u8, arg, "-d")) {
             if (args_iter.next()) |next| {
                 copyf(u8, &args.destination_ip, next);
                 args.destination_ip_s = args.destination_ip[0..next.len];
-            }
+            } else return error.MissingValue;
         } else if (eql(u8, arg, "-p")) {
             if (args_iter.next()) |next| {
                 args.destination_port = try parseInt(u16, next, 10);
-            }
+            } else return error.MissingValue;
         } else if (eql(u8, arg, "-c")) {
             if (args_iter.next()) |next| {
                 args.connections = try parseInt(usize, next, 10);
-            }
-        } else {
-            print("ERROR: unrecognized argument: {s}\n", .{arg});
-            return error.InvalidArgs;
-        }
+            } else return error.MissingValue;
+        } else return error.InvalidArgs;
     }
     return args;
 }
 
 pub fn main(init: std.process.Init) !u8 {
-    // const minimal = init.minimal;
     const gpa = init.arena.allocator();
+    const io = init.io;
 
     const stdout_buffer = try gpa.alloc(u8, 1024);
     defer gpa.free(stdout_buffer);
-    var stdout_writer = File.stdout().writer(init.io, stdout_buffer);
+    var stdout_writer = File.stdout().writer(io, stdout_buffer);
     const stdout = &stdout_writer.interface;
 
     const stderr_buffer = try gpa.alloc(u8, 1024);
     defer gpa.free(stderr_buffer);
-    var stderr_writer = File.stderr().writer(init.io, stderr_buffer);
+    var stderr_writer = File.stderr().writer(io, stderr_buffer);
     const stderr = &stderr_writer.interface;
 
     try stdout.print("SynFlood " ++ build_options.VERSION ++ "\n", .{});
@@ -98,6 +105,13 @@ pub fn main(init: std.process.Init) !u8 {
             return 0;
         },
         error.InvalidArgs => {
+            try stderr.print("ERROR: unrecognized argument: {s}\n", .{args_status.arg});
+            try stderr.flush();
+            return 1;
+        },
+        error.MissingValue => {
+            try stderr.print("ERROR: argument {s} is missing a value\n", .{args_status.arg});
+            try stderr.flush();
             return 1;
         },
         else => return err,
